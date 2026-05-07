@@ -22,6 +22,7 @@
 #include "Registries/ClassRegistry.h"
 #include "LuaCore.h"
 #include "LuaDynamicBinding.h"
+#include "Misc/EngineVersionComparison.h"
 #include "UELib.h"
 #include "ObjectReferencer.h"
 #include "UnLuaDelegates.h"
@@ -33,7 +34,11 @@
 
 namespace UnLua
 {
+#if UE_VERSION_OLDER_THAN(5, 7, 0)
     constexpr EInternalObjectFlags AsyncObjectFlags = EInternalObjectFlags::AsyncLoading | EInternalObjectFlags::Async;
+#else
+    constexpr EInternalObjectFlags AsyncObjectFlags = EInternalObjectFlags::AsyncLoadingPhase1 | EInternalObjectFlags::AsyncLoadingPhase2 | EInternalObjectFlags::Async;
+#endif
 
     TMap<lua_State*, FLuaEnv*> FLuaEnv::AllEnvs;
     FLuaEnv::FOnCreated FLuaEnv::OnCreated;
